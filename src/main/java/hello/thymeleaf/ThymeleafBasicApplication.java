@@ -8,6 +8,7 @@ public class ThymeleafBasicApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ThymeleafBasicApplication.class, args);
+		System.out.println("commit test");
 	}
 
 }
