@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- 자바스크립트 인라인 사용 전 -->
+<script>
+    var username = [[${user.username}]];  //여기서 문제는 string이므로 " "를 감싸줘야 한다. 그래서 오류
+    var username2 = "[[${user.username}]]"; //string형식을 매번 이렇게 감싸줘야 하는 불편함이 있다..
+    var age = [[${user.age}]];   //또 숫자는 " " 를 감싸면 안되므로 신경써야 하는 부분이 많은 것
+
+    //자바스크립트 내추럴 템플릿
+    var username3 =/*[[${user.username}]]*/  "test username";
+
+    //객체
+    var user = [[${user}]]; //객체를 넣으면 tostring의 결과가 출력되어버린다..
+</script>
+
+<!-- 자바스크립트 인라인 사용 후 -->
+<script th:inline="javascript">
+    var username = [[${user.username}]];
+    var age = [[${user.age}]];
+
+    //자바스크립트 내추럴 템플릿
+    var username3 =/*[[${user.username}]]*/  "test username";
+
+    //객체
+    var user = [[${user}]];  //객체를 받으면 Json형태로 반환해준다 :)
+
+</script>
+
+<!-- 자바스크립트 인라인 each -->
+<script th:inline="javascript">
+
+    [# th:each = "user, stat : ${users}"]
+    var user [[${stat.count}]] = [[${user}]];
+    [/]
+
+</script>
+
+</body>
+</html>
