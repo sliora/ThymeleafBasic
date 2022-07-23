@@ -23,6 +23,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.seleniumhq.selenium:selenium-java:4.2.1'
 	implementation 'com.google.code.gson:gson:2.9.0' /* Google Json Open Library */
+	implementation 'org.jsoup:jsoup:1.14.3'
+	implementation 'org.springfreamework.boot:spring-boot-devtools'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
