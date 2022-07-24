@@ -2,6 +2,7 @@ package hello.thymeleaf;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,33 +27,61 @@ import java.util.List;
 public class CrawlingExample {
 
     private WebDriver driver;
-    private static final String url = "https://lostark.game.onstove.com/Profile/Character/엉왜";
+
+
+    @GetMapping("sasa")
+    public String getSasa() throws IOException {
+
+        //String document = Jsoup.connect("http://152.70.248.4:5000/adventureisland/").ignoreContentType(true).get().text();
+
+
+            var document = org.jsoup.Jsoup.connect("http://152.70.248.4:5000/adventureisland/").ignoreContentType(true).get().text();
+
+            var island = "";
+
+         /*   if(JSON.parse(document).SasaList.length != 0) {
+                for(var i=0; i<JSON.parse(document).Island.length; i++) {
+                    island += JSON.parse(document).Island[i].Name +" : "+JSON.parse(document).Island[i].Reward +"\n"
+                }
+
+                replier.reply("[오늘의 모험섬]\n\n" + island +"\n" + JSON.parse(document).IslandDate)
+            }
+            else {
+                replier.reply("오늘은 더이상 모험섬 정보가 없습니다.")
+            } */
+
+        return "";
+    }
+
 
     @GetMapping("test/api/v2")
-    public String createApiV2() throws IOException {
+    public Object createApiV2() throws IOException {
+
+        final String url = "https://lostark.game.onstove.com/Profile/Character/엉왜";
+
         Document document = Jsoup.connect(url).ignoreContentType(true).get();
         //Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/);
 
         //String itemLv = document.select(".level-info2__item").text().replace("Lv.","").replace("달성 아이템 레벨","").substring(0, 5);
         String itemLv = document.select(".level-info2__item").get(0).ownText();
-        String charLv = document.select(".level-info__item").text().replace("Lv.","").replace("전투 레벨","");
-        String totalLv = document.select(".level-info__expedition").text().replace("Lv.","").replace("원정대 레벨","");
-        String server = document.select(".profile-character-info__server").text().replace("@","");
-        String guild = document.select(".game-info__guild").text().replace("길드","");
-        String skillPoint = document.select(".profile-skill__point").text().replace("사용 스킬 포인트","").replace("보유 스킬 포인트","");
-        String carve = document.select(".profile-ability-engrave span").text().replace("환류","환").replace("예리한 둔기","예").replace("타격의 대가","타").replace("아드레날린","아").replace("원한","원").replace("저주받은 인형","저").replace("버스트","버").replace("기습의 대가","기").replace("속전속결","속").replace("점화","점").replace("돌격대장","돌").replace("멈출 수 없는 충동","충").replace("핸드거너","핸").replace("정밀 단도","정").replace("속전속결","속").replace("안정된 상태","안").replace("진화의 유산","유").replace("바리게이트","바").replace("최대 마나 증가","최").replace("절실한 구원","절").replace("중갑 착용","중").replace("각성","각").replace("위기 모면","위").replace("달인의 저력","달").replace("강화 무기","강").replace("정기 흡수","정").replace("일격필살","일").replace("피스메이커","피").replace("잔재된 기운","잔").replace("슈퍼 차지","슈").replace("상급 소환사","상").replace("만개","만").replace("전문의","전");
-        String attDef = document.select(".profile-ability-basic span").next("span").text().replace(" "," / ").replace("\\B(?=(\\d{3})+(?!\\d))", ",");
+        String charLv = document.select(".level-info__item").text().replace("Lv.", "").replace("전투 레벨", "");
+        String totalLv = document.select(".level-info__expedition").text().replace("Lv.", "").replace("원정대 레벨", "");
+        String server = document.select(".profile-character-info__server").text().replace("@", "");
+        String guild = document.select(".game-info__guild").text().replace("길드", "");
+        String skillPoint = document.select(".profile-skill__point").text().replace("사용 스킬 포인트", "").replace("보유 스킬 포인트", "");
+        String carve = document.select(".profile-ability-engrave span").text().replace("환류", "환").replace("예리한 둔기", "예").replace("타격의 대가", "타").replace("아드레날린", "아").replace("원한", "원").replace("저주받은 인형", "저").replace("버스트", "버").replace("기습의 대가", "기").replace("속전속결", "속").replace("점화", "점").replace("돌격대장", "돌").replace("멈출 수 없는 충동", "충").replace("핸드거너", "핸").replace("정밀 단도", "정").replace("속전속결", "속").replace("안정된 상태", "안").replace("진화의 유산", "유").replace("바리게이트", "바").replace("최대 마나 증가", "최").replace("절실한 구원", "절").replace("중갑 착용", "중").replace("각성", "각").replace("위기 모면", "위").replace("달인의 저력", "달").replace("강화 무기", "강").replace("정기 흡수", "정").replace("일격필살", "일").replace("피스메이커", "피").replace("잔재된 기운", "잔").replace("슈퍼 차지", "슈").replace("상급 소환사", "상").replace("만개", "만").replace("전문의", "전");
+        String attDef = document.select(".profile-ability-basic span").next("span").text().replace(" ", " / ").replace("\\B(?=(\\d{3})+(?!\\d))", ",");
         String charImage = document.select(".profile-equipment__character img").get(0).absUrl("src");
         String card = document.select(".card-effect__title").last().text();
         int qualityValue = 0;
         int equipValue = 0;
 
         JsonObject result = new JsonObject();
-        JsonArray jsonArr =new JsonArray();
+        JsonArray jsonArr = new JsonArray();
         JsonObject jsonObj = new JsonObject();
 
-        result.addProperty("code","200");
-        result.addProperty("message","OK");
+        result.addProperty("code", "200");
+        result.addProperty("message", "OK");
 
         //jsonArr
         jsonObj.addProperty("charLv", charLv);
@@ -66,10 +95,10 @@ public class CrawlingExample {
         jsonObj.addProperty("card", card);
 
         jsonArr.add(jsonObj);
-        result.add("data",jsonArr);
+        result.add("data", jsonArr);
 
         String[] charFeature = {};
-        for (var i=0; i<document.select(".profile-ability-battle span").next("span").size(); i++) {
+        for (var i = 0; i < document.select(".profile-ability-battle span").next("span").size(); i++) {
 
             //charFeature[i] = (document.select(".profile-ability-battle span").next("span").get(i).text());
             System.out.println(document.select(".profile-ability-battle span").next("span").get(i).text());
@@ -87,7 +116,7 @@ public class CrawlingExample {
         //replier.reply(JSON.stringify(result));
 
 
-        return result.toString();
+        return result;
     }
 
         /**
@@ -123,6 +152,8 @@ public class CrawlingExample {
     }
 
     private String getDataList() throws InterruptedException {
+
+        final String url = "https://lostark.game.onstove.com/Profile/Character/엉왜";
         List<String> list = new ArrayList<>();
 
         //WebDriverWait webDriverWait = new WebDriverWait(driver, 10);	//⭐⭐⭐
